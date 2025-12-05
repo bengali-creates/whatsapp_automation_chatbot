@@ -24,19 +24,28 @@ app.get('/', (req, res) => {
   }
 });
 
-// Route for POST requests
-app.post('/', async(req, res) => {
-  const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
+
+app.post('/', async (req, res) => {
+ const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
   console.log(`\n\nWebhook received ${timestamp}\n`);
   console.log(JSON.stringify(req.body, null, 2));
-  const messageText = req.body.entry[0].changes[0].value.messages[0].text.body;
-const senderPhone = req.body.entry[0].changes[0].value.messages[0].from;
-    if (senderPhone && messageText) {
-              await sendTextMessage(senderPhone,messageText);
-          } else {
-              console.log("⚠️ Could not extract sender phone number.");
-          }
-  res.status(200).end();
+    res.status(200).end(); 
+
+    const body = req.body;
+    const isMessage = body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+    if (isMessage) {
+        const messageObject = body.entry[0].changes[0].value.messages[0];
+        const senderPhone = messageObject.from;
+        const messageText = messageObject.text?.body || "Media/Not Text";
+
+        console.log(`📩 Received from ${senderPhone}: ${messageText}`);
+        if (senderPhone) {
+            await sendTextMessage(senderPhone, "I received your message!");
+        }
+    } else {
+    
+    }
+    console.log('first', first)
 });
 
 // Start the server
