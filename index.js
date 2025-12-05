@@ -52,7 +52,7 @@ async function sendTextMessage(phone_number,text) {
         url: 'https://graph.facebook.com/v22.0/892378397293995/messages',
         method: 'post',
         headers: {
-            'Authorization': `Bearer ${process.env.VERIFY_TOKEN}`,
+            'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`,
             'Content-Type': 'application/json'
         },
         data: JSON.stringify({
@@ -69,10 +69,10 @@ async function sendTextMessage(phone_number,text) {
 }
 sendTextMessage()
 
-async function webHookTextMessage() {
-    const response= fetch
+// async function webHookTextMessage() {
+//     const response= fetch
 
-}
+// }
 
 module.exports = {
     sendTextMessage,
