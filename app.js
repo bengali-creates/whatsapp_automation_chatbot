@@ -1,5 +1,6 @@
 
 const express = require('express');
+const { sendTextMessage, sendTemplateMessage } = require('./index');
 
 
 const app = express();
@@ -24,10 +25,13 @@ app.get('/', (req, res) => {
 });
 
 // Route for POST requests
-app.post('/', (req, res) => {
+app.post('/', async(req, res) => {
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
   console.log(`\n\nWebhook received ${timestamp}\n`);
   console.log(JSON.stringify(req.body, null, 2));
+  const messageText = req.body.entry[0].changes[0].value.messages[0].text.body;
+const senderPhone = req.body.entry[0].changes[0].value.messages[0].from;
+    await sendTextMessage(senderPhone, messageText);
   res.status(200).end();
 });
 
@@ -35,3 +39,4 @@ app.post('/', (req, res) => {
 app.listen(port, () => {
   console.log(`\nListening on port ${port}\n`);
 });
+
