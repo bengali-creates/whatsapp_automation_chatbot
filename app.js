@@ -31,7 +31,11 @@ app.post('/', async(req, res) => {
   console.log(JSON.stringify(req.body, null, 2));
   const messageText = req.body.entry[0].changes[0].value.messages[0].text.body;
 const senderPhone = req.body.entry[0].changes[0].value.messages[0].from;
-    await sendTextMessage(senderPhone, messageText);
+    if (senderPhone) {
+              await sendTextMessage(senderPhone,messageText);
+          } else {
+              console.log("⚠️ Could not extract sender phone number.");
+          }
   res.status(200).end();
 });
 
