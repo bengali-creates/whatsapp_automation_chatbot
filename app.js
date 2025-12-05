@@ -40,12 +40,12 @@ app.post('/', async (req, res) => {
 
         console.log(`📩 Received from ${senderPhone}: ${messageText}`);
         if (senderPhone) {
-            // await sendTextMessage(senderPhone, "I received your message!");
+            await sendTextMessage(senderPhone, "I received your message!");
         }
     } else {
     
     }
-    console.log('first', first)
+    // console.log('first', first)
 });
 
 // Start the server

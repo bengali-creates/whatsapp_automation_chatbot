@@ -67,7 +67,7 @@ async function sendTextMessage(phone_number,text) {
 
     console.log(response.data) 
 }
-sendTextMessage()
+
 
 // async function webHookTextMessage() {
 //     const response= fetch
