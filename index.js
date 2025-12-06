@@ -2,6 +2,7 @@ require('dotenv').config()
 const axios = require('axios')
 const FormData = require('form-data')
 const fs = require('fs')
+const{generateNodeAi}=require('./llm/conversation_agent')
 
 async function sendTemplateMessage() {
         const response = await axios({
@@ -48,6 +49,8 @@ async function sendTemplateMessage() {
 }
 
 async function sendTextMessage(phone_number,text) {
+    console.log(process.env.WHATSAPP_TOKEN)
+    const airesponse= await generateNodeAi(text);
     const response = await axios({
         url: 'https://graph.facebook.com/v22.0/892378397293995/messages',
         method: 'post',
@@ -60,7 +63,8 @@ async function sendTextMessage(phone_number,text) {
             to: phone_number,
             type: 'text',
             text:{
-                body: `hi human u said ${text} .Dammmmmnnn this is crazy`
+                // body: `hi human u said ${text} .Dammmmmnnn this is crazy`
+                body: airesponse
             }
         })
     })
