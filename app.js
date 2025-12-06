@@ -1,12 +1,14 @@
 
 const express = require('express');
 const { sendTextMessage, sendTemplateMessage } = require('./index');
+const { saveMessage, getChatHistory } = require('./actions/messageSave');
 
 
 const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.set('trust proxy', 1);
 
 
 const port = process.env.PORT || 3000;
@@ -15,6 +17,7 @@ const verifyToken = process.env.VERIFY_TOKEN;
 // Route for GET requests
 app.get('/', (req, res) => {
   const { 'hub.mode': mode, 'hub.challenge': challenge, 'hub.verify_token': token } = req.query;
+
 
   if (mode === 'subscribe' && token === verifyToken) {
     console.log('WEBHOOK VERIFIED');
@@ -37,13 +40,16 @@ app.post('/', async (req, res) => {
         const messageObject = body.entry[0].changes[0].value.messages[0];
         const senderPhone = messageObject.from;
         const messageText = messageObject.text?.body || "Media/Not Text";
-
+        const userName = body.entry[0].changes[0].value.contacts[0].profile.name;
+        const  whatsappId = body.entry[0].id
+      const res=await saveMessage(whatsappId,senderPhone, 'user', messageText, userName,)
         console.log(`📩 Received from ${senderPhone}: ${messageText}`);
         if (senderPhone) {
-            await sendTextMessage(senderPhone, "I received your message!");
+            const res=await sendTextMessage(senderPhone, "I received your message!",whatsappId);
+const resai=await saveMessage(whatsappId,senderPhone, 'assistant', res, userName,)
         }
     } else {
-    
+        console.log("⚠️ No message found in the webhook payload.");
     }
     // console.log('first', first)
 });
