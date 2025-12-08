@@ -6,7 +6,7 @@ const{generateNodeAi}=require('./llm/conversation_agent')
 
 async function sendTemplateMessage() {
         const response = await axios({
-        url: 'https://graph.facebook.com/v20.0/phone_number_id/messages',
+        url: ' https://graph.facebook.com/v22.0/893308493870482/messages',
         method: 'post',
         headers: {
             'Authorization': `Bearer ${process.env.VERIFY_TOKEN}`,
@@ -48,11 +48,11 @@ async function sendTemplateMessage() {
     console.log(response.data)
 }
 
-async function sendTextMessage(phone_number,text) {
+async function sendTextMessage(phone_number,text,id) {
     console.log(process.env.WHATSAPP_TOKEN)
-    const airesponse= await generateNodeAi(text);
+    const airesponse= await generateNodeAi(text,id);
     const response = await axios({
-        url: 'https://graph.facebook.com/v22.0/892378397293995/messages',
+        url: ' https://graph.facebook.com/v22.0/893308493870482/messages',
         method: 'post',
         headers: {
             'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`,
@@ -70,9 +70,53 @@ async function sendTextMessage(phone_number,text) {
     })
 
     console.log(response.data) 
+    return airesponse;
 }
 
+async function sendMediaMessage() {
+    const response = await axios({
+        url: ' https://graph.facebook.com/v22.0/893308493870482/messages',
+        method: 'post',
+        headers: {
+            'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+            messaging_product: 'whatsapp',
+            to: '916290700659',
+            type: 'image',
+            image:{
+                link: 'https://dummyimage.com/600x400/000/fff.png&text=manfra.io',
+                caption: 'This is a media message'
+            }
+        })
+    })
 
+    console.log(response.data)    
+}
+async function sendAudioMessage() {
+    const response = await axios({
+        url: ' https://graph.facebook.com/v22.0/893308493870482/messages',
+        method: 'post',
+        headers: {
+            'Authorization': `Bearer ${process.env.WHATSAPP_TOKEN}`,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({
+            messaging_product: 'whatsapp',
+            to: '916290700659',
+            type: 'image',
+            image:{
+                link: 'https://dummyimage.com/600x400/000/fff.png&text=manfra.io',
+                caption: 'This is a media message'
+            }
+        })
+    })
+
+    console.log(response.data)    
+}
+
+// sendMediaMessage()
 // async function webHookTextMessage() {
 //     const response= fetch
 
